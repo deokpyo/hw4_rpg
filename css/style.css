@@ -20,6 +20,10 @@ body {
     font-size: 20px;
     line-height: 20px;
 }
+
+#header h4 {
+	color: #E0B021;
+}
 .nav {
 	box-sizing: border-box;
     margin-left: auto;
@@ -37,7 +41,7 @@ body {
 .temp_player .thumbnail {
     background-color: transparent;
     color: #FFFFFF;
-    width: 19%;
+    width: 218px;
     height: 360px;
     float: left;
     margin: 20px 5px;
@@ -46,15 +50,18 @@ body {
 .temp_enemy .thumbnail {
     background-color: transparent;
     color: #FFFFFF;
-    width: 19%;
+    width: 218px;
     height: 360px;
     float: left;
     margin: 20px 5px;
 }
 
-
-.caption h3 {
+#player h3 {
 	color: #FFFFFF;
+}
+
+#fight h3, #enemy h3, #enemy h2 {
+	color: #D49E43;
 }
 
 .caption h4 {

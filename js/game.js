@@ -5,37 +5,38 @@ var enemy_copy;
 var player_selected = "";
 var enemy_selected = "";
 var base_AP = 0;
+var counter = 0;
 
 // Player Object
 var player = {
 	P1: {
 		name: "Amazon",
-		HP: 150,
-		AP: 20,
+		HP: 600,
+		AP: 30,
     selected: false,
 	},
 	P2: {
 		name: "Barbarian",
-		HP: 200,
+		HP: 1000,
 		AP: 15,
     selected: false,
 	},
 	P3: {
 		name: "Necromancer",
-		HP: 170,
-		AP: 18,
+		HP: 400,
+		AP: 40,
     selected: false,
 	},
 	P4: {
 		name: "Paladin",
-		HP: 190,
-		AP: 17,
+		HP: 800,
+		AP: 20,
     selected: false,
 	},
 	P5: {
 		name: "Sorceress",
-		HP: 140,
-		AP: 22,
+		HP: 300,
+		AP: 50,
     selected: false,
 	},
 };
@@ -44,36 +45,36 @@ var player = {
 var enemy = {
 	E1: {
 		name: "Andariel",
-		HP: 200,
-		CAP: 15,
+		HP: 500,
+		CAP: 10,
     selected: false,
     dead: false,
 	},
 	E2: {
 		name: "Duriel",
-		HP: 300,
-		CAP: 20,
+		HP: 200,
+		CAP: 100,
     selected: false,
     dead: false,
 	},
 	E3: {
 		name: "Mephisto",
-		HP: 400,
-		CAP: 22,
+		HP: 1000,
+		CAP: 5,
     selected: false,
     dead: false,
 	},
 	E4: {
 		name: "Diablo",
-		HP: 500,
-		CAP: 25,
+		HP: 1000,
+		CAP: 200,
     selected: false,
     dead: false,
 	},
 	E5:{
 		name: "Baal",
-		HP: 600,
-		CAP: 30,
+		HP: 2000,
+		CAP: 20,
     selected: false,
     dead: false,
 	},
@@ -81,8 +82,9 @@ var enemy = {
 
 // Game Object
 var game = {
-    tempDiv: $("<div>"),
 
+    tempDiv: $("<div>"),
+    // function to set up a new game
     load: function(){
       game.loadPlayer(player);
       game.loadEnemy(enemy);
@@ -92,10 +94,13 @@ var game = {
       $("#enemy").hide();
       $("#fight").hide();
       $("#fight_enemy").hide();
-
+      $("#next_enemy").hide();
+      $("#lose").hide();
+      $("#win").hide();
+      $("#reset").hide();
     },
 
-  // main function to display the player/enemy panel using two inputs
+  // function to display the player/enemy panel using two inputs
   loadGame: function(obj, type){
       var divTag = $("<div>");
       var divCap = $("<div>");
@@ -115,6 +120,7 @@ var game = {
       this.tempDiv.append(divTag); 
   },
 
+  // function to load the classes for the player to choose
 	loadPlayer: function(str){
     this.tempDiv.addClass("temp_player")
 		for(i in str){
@@ -128,6 +134,7 @@ var game = {
     //first_pick = false;
 	},
 
+  // function to load the enemies for the player to fight against
   loadEnemy: function(str){
     this.tempDiv.addClass("temp_enemy");
     // when first loading all the enemies
@@ -145,6 +152,7 @@ var game = {
     }
     // when selected enemy is dead
     if(enemy_selected.dead){
+      $("#next_enemy").show();
       // create a string variable to remove the selected dead enemy from the panel
       var remove_enemy = "div[data-enemy='" + enemy_selected.name + "']";
       $(remove_enemy).remove();
@@ -153,10 +161,21 @@ var game = {
       $("#fight_enemy").hide();
       enemy_selected = "";
     }
+    // when all the enemies are dead
+    if(counter === 5){
+      $("#next_enemy").hide();
+      $("#enemy").hide();
+      $("#attack_button").hide();
+      $("#fight_enemy").hide();
+      $("#win").show();
+      $("#reset").show();
+      $("#reset_button").show();
+    }
     // reset tempDiv for future use
     this.tempDiv = $("<div>");
   },
 
+  // function for selecting a plyer
   selectPlayer: function(selected){
     for(i in player){
       if(player[i].name === selected){
@@ -168,6 +187,7 @@ var game = {
     this.loadPlayer(player);
   },
 
+  // function for selecting an enemy
   selectEnemy: function(selected){
     this.tempDiv.addClass("temp_enemy");
     for(i in enemy){
@@ -179,32 +199,38 @@ var game = {
     this.loadEnemy(enemy);
   },
 
+  // function to attack enemy and perform counter attack from the enemy
   attackEnemy: function(){
     // attack enemy
     enemy_selected.HP -= player_selected.AP;
     // increase player's AP by base_AP
     player_selected.AP += base_AP;
+    // when enemy is dead
     if(enemy_selected.HP < 0){
-      alert("You Win");
       enemy_selected.selected = false;
       enemy_selected.dead = true;
+      counter++;
       $("#attack_button").hide();
       $("#enemy").show();
     }
     else{
       // counter attack player
       player_selected.HP -= enemy_selected.CAP;
+      // when player is dead
       if(player_selected.HP < 0){
-        alert("You Lose");
         player_selected.HP = 0;
         $("#attack_button").hide();
-        $("#reset_button").show();
+        $("#fight_enemy").hide();
+        $("#lose").show();
+        $("#reset").show();
+        $("#reset_button").show(); 
       }
     }
     this.loadPlayer(player);
     this.loadEnemy(enemy);
   },
 
+  // function to reset the variables and objects for a new game
   reset: function(){
     player = player_copy;
     enemy = enemy_copy;
@@ -212,6 +238,7 @@ var game = {
     player_selected = "";
     enemy_selected = "";
     base_AP = 0;
+    counter = 0;
     game.load();
   },
 };
@@ -222,19 +249,20 @@ $(document).ready(function(){
   enemy_copy = enemy;
   game.load();
   
+  // when a class is clicked
   $(".player").on("click", function(){
     var selected = $(this).data("player");
-    console.log(selected);
     game.selectPlayer(selected);
     $("#enemy").show();
     $("#select_class").hide();
   });
 
+  // when an enemy is clicked
   $(".enemy").on("click", function(){
-    console.log("enemy is selected");
     var selected = $(this).data("enemy");
     game.selectEnemy(selected);
     $("#enemy").hide();
+    $("#next_enemy").hide();
     $("#fight_enemy").show();
     $("#fight").show();
     $("#attack_button").show();
@@ -249,6 +277,3 @@ $(document).ready(function(){
     location.reload();
   });
 });
-
-
-
