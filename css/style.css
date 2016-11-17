@@ -1,0 +1,73 @@
+body {
+	background: #250a08 url(../images/bg.jpg) no-repeat center -200px !important;
+	color: #FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#header {
+	background: #250a08 url(../images/bg.jpg) no-repeat center 0 !important;
+	width: 100%;
+    position: relative;
+    overflow: auto;
+    z-index: 9999;
+    min-height: 100px;
+    transform: translate3d(0,0,0);
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.07);
+    border-width: 0 0 1px;
+    color: #fff;
+    height: 60px;
+    width: 100%;
+    font-size: 20px;
+    line-height: 20px;
+}
+.nav {
+	box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1170px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#game_panel {
+	display: block;
+	overflow: auto;
+}
+
+.temp_player .thumbnail {
+    background-color: transparent;
+    color: #FFFFFF;
+    width: 19%;
+    height: 360px;
+    float: left;
+    margin: 20px 5px;
+}
+
+.temp_enemy .thumbnail {
+    background-color: transparent;
+    color: #FFFFFF;
+    width: 19%;
+    height: 360px;
+    float: left;
+    margin: 20px 5px;
+}
+
+
+.caption h3 {
+	color: #FFFFFF;
+}
+
+.caption h4 {
+	color: red;
+}
+
+.player_panel, .enemy_panel {
+	overflow: auto;
+}
+
+.player_panel img {
+	background-color: transparent;
+}
+.enemy_panel img {
+	background-color: transparent;
+}
